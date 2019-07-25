@@ -1,11 +1,11 @@
 from api import api_models
 from api import api_interfaces
 from component_interface import persitent
-
+from component_db import sqlite_storage
 
 class AuthenticationError(Exception):
     def __init__(self, message):
-        super(self).__init__(message)
+        super().__init__(message)
         self.status = 403
 
 # business logic for super admin
@@ -20,7 +20,7 @@ class UserAPI(api_interfaces.IUserAPI):
         self._storage = storage
 
     def _validate(self, api_key):
-        if self._api_key == api_key:
+        if self._api_key != api_key:
             raise AuthenticationError('Authentication error')
 
     def create(self, user: api_models.User, api_key: str = None):
@@ -42,3 +42,5 @@ class UserAPI(api_interfaces.IUserAPI):
         self._validate(api_key)
         res = self._storage.delete(user_id)
         return res
+
+

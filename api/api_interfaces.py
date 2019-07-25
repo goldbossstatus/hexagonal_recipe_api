@@ -20,20 +20,17 @@ class IAuthAPI:
 
 
 class IUserAPI:
-    @staticmethod
-    def create(user: api_models.User, api_key: str = None):
+
+    def create(self, user: api_models.User, api_key: str = None):
         raise NotImplemented
 
-    @staticmethod
-    def read(user_id: str, api_key: str = None) -> api_models.User:
+    def read(self, user_id: str, api_key: str = None) -> api_models.User:
         raise NotImplemented
 
-    @staticmethod
-    def update(user_id: str, user: api_models.User, api_key: str = None):
+    def update(self, user_id: str, user: api_models.User, api_key: str = None):
         raise NotImplemented
 
-    @staticmethod
-    def delete(user_id: str, api_key: str = None):
+    def delete(self, user_id: str, api_key: str = None):
         raise NotImplemented
 
 
