@@ -44,3 +44,11 @@ class UserAPI(api_interfaces.IUserAPI):
         return res
 
 
+class UserReadAPI(api_interfaces.IUserReadApi):
+    def __init__(self, user_api: api_interfaces.IUserAPI):
+        # mangled aka private
+        self.__user_api = user_api
+
+    def read(self, user_id: str, api_key: str = None) -> api_models.User:
+        return self.__user_api.read(user_id, api_key=api_key)
+

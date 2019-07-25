@@ -34,6 +34,11 @@ class IUserAPI:
         raise NotImplemented
 
 
+class IUserReadApi:
+    def read(self, user_id: str, api_key: str = None) -> api_models.User:
+        raise NotImplemented
+
+
 class IURecipeAPI:
     @staticmethod
     def create(user: api_models.Recipe, jwt: str = None):
