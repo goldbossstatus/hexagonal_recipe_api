@@ -2,20 +2,16 @@ from api import api_models
 
 
 class IAuthAPI:
-    @staticmethod
-    def authenticate(user_name: str, password: str) -> str:
+    def authenticate(self, user_name: str, password: str) -> str:
         raise NotImplemented
 
-    @staticmethod
-    def revoke(user_name: str, password: str, jwt: str) -> bool:
+    def revoke(self, user_name: str, password: str, jwt: str) -> bool:
         raise NotImplemented
 
-    @staticmethod
-    def is_expired(jwt: str) -> bool:
+    def is_expired(self, jwt: str) -> bool:
         raise NotImplemented
 
-    @staticmethod
-    def is_authenticated(jwt: str) -> bool:
+    def is_authenticated(self, jwt: str) -> bool:
         raise NotImplemented
 
 

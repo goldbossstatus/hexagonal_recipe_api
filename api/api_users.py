@@ -45,10 +45,51 @@ class UserAPI(api_interfaces.IUserAPI):
 
 
 class UserReadAPI(api_interfaces.IUserReadApi):
-    def __init__(self, user_api: api_interfaces.IUserAPI):
+    def __init__(self, user_api: api_interfaces.IUserAPI, api_key: str = None):
         # mangled aka private
         self.__user_api = user_api
+        self.__api_key = api_key
 
     def read(self, user_id: str, api_key: str = None) -> api_models.User:
+        if not api_key:
+            api_key = self.__api_key
         return self.__user_api.read(user_id, api_key=api_key)
+
+
+class AuthAPI(api_interfaces.IAuthAPI):
+    def __init__(self,
+                 user_read: api_interfaces.IUserReadApi,
+                 jwt_store: persitent.IJwtStorage):
+        self.__user_read = user_read
+        self.__jwt_store = jwt_store
+
+    def authenticate(self, user_id: str, password: str) -> str:
+        '''
+        :param user_id:
+        :param password:
+        :return: jwt token
+        '''
+
+        user = self.__user_read.read(user_id)
+        if not user:
+            # todo raise user not found
+            pass
+        elif password != user.user_password:
+            # todo raise auth err
+            pass
+        else:
+            # todo JWT generator, expiration logic
+            jwt = 'some.dummy.jwt'
+            # todo transactional logic
+            jwt_r = self.__jwt_store.create(jwt, user_id, expire_ts=0)
+            return jwt_r
+
+    # def revoke(self, user_name: str, password: str, jwt: str) -> bool:
+    #     raise NotImplemented
+    #
+    # def is_expired(self, jwt: str) -> bool:
+    #     raise NotImplemented
+    #
+    # def is_authenticated(self, jwt: str) -> bool:
+    #     raise NotImplemented
 
