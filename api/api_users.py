@@ -2,6 +2,7 @@ from api import api_models
 from api import api_interfaces
 from component_interface import persitent
 from component_db import sqlite_storage
+import jwt
 
 class AuthenticationError(Exception):
     def __init__(self, message):
@@ -79,11 +80,17 @@ class AuthAPI(api_interfaces.IAuthAPI):
             pass
         else:
             # todo JWT generator, expiration logic
-            jwt = api_models.Jwt(jwt='dummy.jwt.token',
-                                 user_id=user_id)
+            jwt_token = api_models.JwtToken(
+                user_id=user_id,
+                user_password=password,
+            )
+            jwt_record = api_models.Jwt(
+                jwt=jwt_token.jwt,
+                user_id=user_id,
+            )
             # todo transactional logic
-            r = self.__jwt_store.create(jwt)
-            return jwt.jwt
+            r = self.__jwt_store.create(jwt_record)
+            return jwt_token.jwt
 
     # todo
     # def revoke(self, user_name: str, password: str, jwt: str) -> bool:
@@ -92,6 +99,15 @@ class AuthAPI(api_interfaces.IAuthAPI):
     # def is_expired(self, jwt: str) -> bool:
     #     raise NotImplemented
     #
-    # def is_authenticated(self, jwt: str) -> bool:
-    #     raise NotImplemented
+    def is_authenticated(self, jwt_st: str) -> bool:
+        jwt_record = self.__jwt_store.read_by_jwt(jwt_st)
+
+        user_record = self.__user_store.read(jwt_record.user_id)
+
+        jwt_token = api_models.JwtToken(
+            user_id=user_record.user_id,
+            user_password=user_record.user_password,
+        )
+        return jwt_token.verify(jwt_st)
+
 

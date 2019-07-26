@@ -68,9 +68,9 @@ class JwtStorageDict(IJwtStorage):
         if user_id in self.__users:
             return self.__users[user_id]
 
-    def read_by_jwt(self, jwt: str) -> Jwt:
-        if jwt in self.__data[jwt]:
-            return self.__data[jwt]
+    def read_by_jwt(self, jwt_st: str) -> Jwt:
+        if jwt_st in self.__data:
+            return Jwt.from_dict(self.__data[jwt_st])
 
     def delete(self, jwt: str) -> str:
         raise NotImplemented

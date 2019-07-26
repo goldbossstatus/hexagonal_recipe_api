@@ -22,10 +22,6 @@ user_storage.create(user2)
 auth = AuthAPI(user_store=user_storage_read_only,
                jwt_store=jwt_store)
 
-# connect UserStorageSQLite to user api
 
-#api = UserAPI(UserStorageSQLite(), 'key')
-
-#print(api.read('user_id', api_key='key'))
-
-
+jwt_st = auth.authenticate('user1', 'user1_pass')
+assert auth.is_authenticated(jwt_st)

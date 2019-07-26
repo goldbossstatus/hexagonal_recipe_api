@@ -1,3 +1,5 @@
+import jwt
+
 # models and serializers
 
 
@@ -16,6 +18,44 @@ class BaseModel:
 
     def __repr__(self):
         return f'{self.__class__.__name__}:{str(self.to_dict())}'
+
+
+class JwtToken(BaseModel):
+    FIELD_TYPES = {
+        'user_id': str,
+        'user_password': str,
+        'expiration_ts': int
+    }
+    JWT_ALGO = 'HS256'
+
+    def __init__(self,
+                 user_id: str,
+                 user_password: str,
+                 expiration_ts: int = None,):
+
+        self.user_id = user_id
+        self.user_password = user_password
+        self.expiration_ts = expiration_ts
+
+    def to_dict(self):
+        return {key: getattr(self, key) for key in self.FIELD_TYPES}
+
+    @property
+    def jwt(self):
+        return jwt.encode(self.to_dict(), self.user_password, algorithm=self.JWT_ALGO).decode()
+
+    def verify(self, jwt_st: str):
+        if self.user_password:
+            d = jwt.decode(jwt_st, self.user_password, algorithms=self.JWT_ALGO)
+            if d and isinstance(d, dict) and 'user_password' in d:
+                if d['user_password'] == self.user_password:
+                    return True
+            else:
+                # return False
+                raise ValueError('decode error')
+        else:
+            raise ValueError('no password in jwt token')
+        return False
 
 
 class Jwt(BaseModel):
