@@ -18,33 +18,56 @@ class BaseModel:
         return f'{self.__class__.__name__}:{str(self.to_dict())}'
 
 
+class Jwt(BaseModel):
+    FIELD_TYPES = {
+        'jwt': str,
+        'user_id': str,
+        'expiration_ts': int
+    }
+    jwt = None
+    user_id = None
+    expiration_ts = None
+
+    def __init__(self,
+                 jwt: str,
+                 user_id: str,
+                 expiration_ts: int = None,):
+
+        self.jwt = jwt
+        self.user_id = user_id
+        self.expiration_ts = expiration_ts
+
+    def to_dict(self):
+        return {key: getattr(self, key) for key in self.FIELD_TYPES}
+
+
 class User(BaseModel):
     FIELD_TYPES = {
-        'pk_id': str,
+        'user_id': str,
         'user_email': str,
         'first_name': str,
         'last_name': str,
         'user_password': str,
 
     }
-    pk_id = None
+    user_id = None
     user_email = None
     user_password = None
     first_name = None
     last_name = None
 
     def __init__(self,
-                 user_email: str,
+                 user_id: str,
                  user_password: str,
+                 user_email: str = None,
                  first_name: str = None,
-                 last_name: str = None,
-                 pk_id: str = None):
+                 last_name: str = None,):
 
+        self.user_id = user_id
         self.user_email = user_email
         self.user_password = user_password
         self.first_name = first_name
         self.last_name = last_name
-        self.pk_id = pk_id
 
     def to_dict(self):
         return {key: getattr(self, key) for key in self.FIELD_TYPES}

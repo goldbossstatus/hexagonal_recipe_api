@@ -1,5 +1,7 @@
+from collections import defaultdict
 from component_interface.persitent import IJwtStorage, IUserStorage
 from api.api_models import User
+from api.api_models import Jwt
 
 
 class UserStorageSQLite(IUserStorage):
@@ -14,3 +16,61 @@ class JwtStorageSQLite(IJwtStorage):
     # implement sqlite storage for  tokens
     pass
 
+
+class UserStorageDict(IUserStorage):
+    def __init__(self):
+        self.__users = dict()
+
+    @property
+    def user_data(self):
+        return {k: v for k, v in self.__users.items()}
+
+    def create(self, user: User):
+        if user.user_id not in self.__users:
+            self.__users[user.user_id] = user.to_dict()
+
+    def read_dict(self, user_id: str) -> dict:
+        user_d = self.__users.get(user_id)
+        return user_d
+
+    def read(self, user_id) -> UserStorageSQLite:
+        d = self.read_dict(user_id)
+        if d:
+            return User.from_dict(d)
+
+    # def update(self, user_id, user: User):
+    # #     raise NotImplemented
+    # #
+    # # def delete(self, user_id) -> User:
+    # #     raise NotImplemented
+
+
+class JwtStorageDict(IJwtStorage):
+    def __init__(self):
+        self.__data = dict()
+        self.__users = defaultdict(list)
+
+    @property
+    def users_data(self):
+        return {k: v for k, v in self.__users.items()}
+
+    @property
+    def jwt_data(self):
+        return {k: v for k, v in self.__data.items()}
+
+    def create(self, jwt: Jwt):
+        if jwt.jwt not in self.__data:
+            self.__data[jwt.jwt] = jwt.to_dict()
+            # fix this
+            self.__users[jwt.user_id].append(jwt.to_dict())
+
+    def read_by_user(self, user_id) -> list:
+        if user_id in self.__users:
+            return self.__users[user_id]
+
+    def read_by_jwt(self, jwt: str) -> Jwt:
+        if jwt in self.__data[jwt]:
+            return self.__data[jwt]
+
+    def delete(self, jwt: str) -> str:
+        raise NotImplemented

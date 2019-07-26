@@ -46,7 +46,7 @@ class UserAPI(api_interfaces.IUserAPI):
 
 class UserReadAPI(api_interfaces.IUserReadApi):
     def __init__(self, user_api: api_interfaces.IUserAPI, api_key: str = None):
-        # mangled aka private
+        # __mangled or private
         self.__user_api = user_api
         self.__api_key = api_key
 
@@ -58,19 +58,19 @@ class UserReadAPI(api_interfaces.IUserReadApi):
 
 class AuthAPI(api_interfaces.IAuthAPI):
     def __init__(self,
-                 user_read: api_interfaces.IUserReadApi,
+                 user_store: persitent.ReadOnlyIUserStorage,
                  jwt_store: persitent.IJwtStorage):
-        self.__user_read = user_read
+        self.__user_store = user_store
         self.__jwt_store = jwt_store
 
     def authenticate(self, user_id: str, password: str) -> str:
         '''
         :param user_id:
         :param password:
-        :return: jwt token
+        :return: jwt token string
         '''
 
-        user = self.__user_read.read(user_id)
+        user = self.__user_store.read(user_id)
         if not user:
             # todo raise user not found
             pass
@@ -79,11 +79,13 @@ class AuthAPI(api_interfaces.IAuthAPI):
             pass
         else:
             # todo JWT generator, expiration logic
-            jwt = 'some.dummy.jwt'
+            jwt = api_models.Jwt(jwt='dummy.jwt.token',
+                                 user_id=user_id)
             # todo transactional logic
-            jwt_r = self.__jwt_store.create(jwt, user_id, expire_ts=0)
-            return jwt_r
+            r = self.__jwt_store.create(jwt)
+            return jwt.jwt
 
+    # todo
     # def revoke(self, user_name: str, password: str, jwt: str) -> bool:
     #     raise NotImplemented
     #
