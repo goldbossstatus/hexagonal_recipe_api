@@ -23,5 +23,13 @@ auth = AuthAPI(user_store=user_storage_read_only,
                jwt_store=jwt_store)
 
 
-jwt_st = auth.authenticate('user1', 'user1_pass')
-assert auth.is_authenticated(jwt_st)
+jwt_st1 = auth.authenticate('user1', 'user1_pass')
+assert auth.is_authenticated(jwt_st1)
+
+
+jwt_st2 = auth.authenticate('user2', 'user2_pass')
+assert auth.is_authenticated(jwt_st2)
+
+
+js3 = jwt_st2 = auth.authenticate('user3', 'user3_pass')
+assert not js3
