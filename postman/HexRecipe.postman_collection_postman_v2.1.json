@@ -1,0 +1,122 @@
+{
+	"info": {
+		"_postman_id": "2d94c38e-e8be-4e48-8cd9-4e2f629d0323",
+		"name": "HexRecipe",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth.authenticate",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "user1",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "user1_pass",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/authenticate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth.is_authenticated",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "user1",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "user1_pass",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/is-authenticated/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidXNlcjEiLCJ1c2VyX3Bhc3N3b3JkIjoidXNlcjFfcGFzcyIsImV4cGlyYXRpb25fdHMiOm51bGx9.-og5Qo3aB9MywzS5EMDxElehGV5Fs2tvMAYaJwOiu34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"is-authenticated",
+						"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidXNlcjEiLCJ1c2VyX3Bhc3N3b3JkIjoidXNlcjFfcGFzcyIsImV4cGlyYXRpb25fdHMiOm51bGx9.-og5Qo3aB9MywzS5EMDxElehGV5Fs2tvMAYaJwOiu34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth.revoke",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "user_id",
+							"value": "user1",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "user1_pass",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/v1/revoke/eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidXNlcjEiLCJ1c2VyX3Bhc3N3b3JkIjoidXNlcjFfcGFzcyIsImV4cGlyYXRpb25fdHMiOm51bGx9.-og5Qo3aB9MywzS5EMDxElehGV5Fs2tvMAYaJwOiu34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"v1",
+						"revoke",
+						"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoidXNlcjEiLCJ1c2VyX3Bhc3N3b3JkIjoidXNlcjFfcGFzcyIsImV4cGlyYXRpb25fdHMiOm51bGx9.-og5Qo3aB9MywzS5EMDxElehGV5Fs2tvMAYaJwOiu34"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

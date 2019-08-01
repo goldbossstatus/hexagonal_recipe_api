@@ -48,7 +48,7 @@ class UserStorageDict(IUserStorage):
 class JwtStorageDict(IJwtStorage):
     def __init__(self):
         self.__data = dict()
-        self.__users = defaultdict(list)
+        self.__users = dict()
 
     @property
     def users_data(self):
@@ -61,10 +61,9 @@ class JwtStorageDict(IJwtStorage):
     def create(self, jwt: Jwt):
         if jwt.jwt not in self.__data:
             self.__data[jwt.jwt] = jwt.to_dict()
-            # fix this
-            self.__users[jwt.user_id].append(jwt.to_dict())
+            self.__users[jwt.user_id] = jwt.jwt
 
-    def read_by_user(self, user_id) -> list:
+    def read_by_user(self, user_id) -> str:
         if user_id in self.__users:
             return self.__users[user_id]
 
@@ -72,5 +71,10 @@ class JwtStorageDict(IJwtStorage):
         if jwt_st in self.__data:
             return Jwt.from_dict(self.__data[jwt_st])
 
-    def delete(self, jwt: str) -> str:
-        raise NotImplemented
+    def delete(self, jwt_st: str) -> str:
+        user_o = self.read_by_jwt(jwt_st=jwt_st)
+        jwt_s = self.read_by_user(user_o.user_id)
+        del self.__data[jwt_s]
+        del self.__users[user_o.user_id]
+        assert jwt_s == jwt_st
+        return jwt_st

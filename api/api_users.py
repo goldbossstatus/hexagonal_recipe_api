@@ -92,22 +92,33 @@ class AuthAPI(api_interfaces.IAuthAPI):
             r = self.__jwt_store.create(jwt_record)
             return jwt_token.jwt
 
-    # todo
-    # def revoke(self, user_name: str, password: str, jwt: str) -> bool:
-    #     raise NotImplemented
+    def revoke(self, user_id: str, password: str, jwt_st: str) -> bool:
+        jwt_o = self.__jwt_store.read_by_jwt(jwt_st)
+        if jwt_o:
+            user_o = self.__user_store.read(jwt_o.user_id)
+
+            if jwt_o.user_id != user_id or user_o.user_password != password:
+                return False
+
+            jwt_s = self.__jwt_store.delete(jwt_st)
+            assert jwt_s == jwt_st
+            return True
+        else:
+            return False
+
+    def is_authenticated(self, jwt_st: str) -> bool:
+        jwt_record = self.__jwt_store.read_by_jwt(jwt_st)
+        if jwt_record:
+            user_record = self.__user_store.read(jwt_record.user_id)
+            jwt_token = api_models.JwtToken(
+                user_id=user_record.user_id,
+                user_password=user_record.user_password,
+            )
+            return jwt_token.verify(jwt_st)
+
+        return False
+
     #
     # def is_expired(self, jwt: str) -> bool:
     #     raise NotImplemented
     #
-    def is_authenticated(self, jwt_st: str) -> bool:
-        jwt_record = self.__jwt_store.read_by_jwt(jwt_st)
-
-        user_record = self.__user_store.read(jwt_record.user_id)
-
-        jwt_token = api_models.JwtToken(
-            user_id=user_record.user_id,
-            user_password=user_record.user_password,
-        )
-        return jwt_token.verify(jwt_st)
-
-
