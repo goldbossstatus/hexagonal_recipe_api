@@ -118,7 +118,40 @@ class AuthAPI(api_interfaces.IAuthAPI):
 
         return False
 
+    def get_owner(self, jwt_st: str) -> api_models.User:
+        jwt_record = self.__jwt_store.read_by_jwt(jwt_st)
+        if jwt_record:
+            user_record = self.__user_store.read(jwt_record.user_id)
+            jwt_token = api_models.JwtToken(
+                user_id=user_record.user_id,
+                user_password=user_record.user_password,
+            )
+            verified = jwt_token.verify(jwt_st)
+            if verified:
+                user = api_models.User(user_id=user_record.user_id, user_password='')
+                return user
+
     #
     # def is_expired(self, jwt: str) -> bool:
     #     raise NotImplemented
     #
+
+
+class RecipeAPI(api_interfaces.IURecipeAPI):
+    def __init__(self,
+                 recipe_storage: persitent.IRecipeStorage,
+                 auth: api_interfaces.IAuthAPI):
+        self.__recipe_storage = recipe_storage
+        self.__auth = auth
+
+    def read(self, recipe_id: str, jwt_st: str = None) -> api_models.Recipe:
+        model: api_models.Recipe
+        owner: api_models.
+        authenticated = self.__auth.is_authenticated(jwt_st=jwt_st)
+        owner : api_models
+        if not authenticated:
+            raise ValueError('Not authenticated!')
+        recipe_o = self.__recipe_storage.read(recipe_id)
+        return recipe_o
+
+    def

@@ -1,5 +1,8 @@
 from api.api_models import User
 from api.api_models import Jwt
+from api.api_models import Recipe
+# from api.api_models import Ingredient
+# from api.api_models import Tag
 
 
 class IUserStorage:
@@ -37,5 +40,17 @@ class IJwtStorage:
         raise NotImplemented
 
     def delete(self, jwt: str) -> str:
+        raise NotImplemented
+
+
+class IRecipeStorage:
+
+    def create(self, recipe: Recipe):
+        raise NotImplemented
+
+    def read(self, recipe_id) -> Recipe:
+        raise NotImplemented
+
+    def delete(self, recipe_id: str) -> Recipe:
         raise NotImplemented
 

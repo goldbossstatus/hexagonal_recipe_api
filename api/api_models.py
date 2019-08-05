@@ -141,6 +141,7 @@ class Tag(BaseModel):
 class Recipe(BaseModel):
     FIELD_TYPES = {
         'recipe_id': str,
+        'owner_user_id': str,
         'title': str,
         'time_minutes': str,
         'price': float,
@@ -149,6 +150,7 @@ class Recipe(BaseModel):
         'tags': list
     }
     recipe_id = None
+    owner_user_id = None
     title = None
     time_minutes = None
     price = None

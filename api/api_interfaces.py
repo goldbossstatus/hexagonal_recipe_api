@@ -36,18 +36,14 @@ class IUserReadApi:
 
 
 class IURecipeAPI:
-    @staticmethod
-    def create(user: api_models.Recipe, jwt: str = None):
+    def create(self, recipe: api_models.Recipe, jwt: str = None):
         raise NotImplemented
 
-    @staticmethod
-    def read(recipe_id: str, jwt: str = None) -> api_models.Recipe:
+    def read(self, recipe_id: str, jwt: str = None) -> api_models.Recipe:
         raise NotImplemented
 
-    @staticmethod
-    def update(recipe_id: str, recipe: api_models.Recipe, jwt: str = None):
+    def update(self, recipe_id: str, recipe: api_models.Recipe, jwt: str = None):
         raise NotImplemented
 
-    @staticmethod
-    def delete(recipe_id: str, jwt: str = None) -> api_models.Recipe:
+    def delete(self, recipe_id: str, jwt: str = None) -> api_models.Recipe:
         raise NotImplemented
